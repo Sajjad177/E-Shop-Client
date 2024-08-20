@@ -6,11 +6,11 @@ import SignUpModel from "./SignUpModel";
 import SignInModel from "./SignInModel";
 
 const Navbar = () => {
-  const { user, createUser, createUserGoogle, userLogin, userSignOut } =
+  const { createUser, createUserGoogle, userLogin, userSignOut } =
     useContext(AuthContext);
   const [storedEmail, setStoredEmail] = useState(null);
 
-  // Check localStorage for user email on component mount
+  // Check localStorage for user email :
   useEffect(() => {
     const email = localStorage.getItem("userEmail");
     if (email) {
@@ -44,7 +44,7 @@ const Navbar = () => {
         const user = result.user;
         if (user) {
           toast.success("Successfully Signed Up");
-          localStorage.setItem("userEmail", email); // Store email in localStorage
+          localStorage.setItem("userEmail", email);
           setStoredEmail(email);
         }
         form.reset();
@@ -67,7 +67,7 @@ const Navbar = () => {
         const user = result.user;
         if (user) {
           toast.success("Successfully Signed In");
-          localStorage.setItem("userEmail", email); // Store email in localStorage
+          localStorage.setItem("userEmail", email);
           setStoredEmail(email);
         }
         form.reset();
@@ -87,7 +87,7 @@ const Navbar = () => {
         if (user) {
           const email = user.email;
           toast.success("Successfully Signed In with Google");
-          localStorage.setItem("userEmail", email); // Store email in localStorage
+          localStorage.setItem("userEmail", email);
           setStoredEmail(email);
         }
       })
@@ -99,23 +99,23 @@ const Navbar = () => {
   const logOut = () => {
     userSignOut().then(() => {
       toast.success("Successfully Signed Out");
-      localStorage.removeItem("userEmail"); // Remove email from localStorage on sign out
+      localStorage.removeItem("userEmail");
       setStoredEmail(null);
     });
   };
 
   const links = (
     <>
-      <li>
+      <li className="hover:text-blue-600 transition-colors duration-300">
         <Link to="/">Home</Link>
       </li>
-      <li>
+      <li className="hover:text-blue-600 transition-colors duration-300">
         <Link to="/">Shop</Link>
       </li>
-      <li>
+      <li className="hover:text-blue-600 transition-colors duration-300">
         <Link to="/">About Us</Link>
       </li>
-      <li>
+      <li className="hover:text-blue-600 transition-colors duration-300">
         <Link to="/">Contact Us</Link>
       </li>
     </>
@@ -124,18 +124,18 @@ const Navbar = () => {
   return (
     <>
       <Toaster position="top-right" reverseOrder={false} />
-      <div className="bg-base-200 border-2">
-        <div className="navbar container mx-auto">
+      <div className="bg-base-200 border-b-2 shadow-lg">
+        <div className="navbar container mx-auto flex justify-between items-center py-4">
           <div className="navbar-start">
             <div className="dropdown">
-              <div
+              <button
                 tabIndex={0}
                 role="button"
-                className="btn btn-ghost lg:hidden"
+                className="btn btn-ghost lg:hidden focus:outline-none"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
+                  className="h-6 w-6"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -147,40 +147,37 @@ const Navbar = () => {
                     d="M4 6h16M4 12h8m-8 6h16"
                   />
                 </svg>
-              </div>
+              </button>
               <ul
                 tabIndex={0}
-                className="menu font-bold menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+                className="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-52 p-2 shadow-lg transition duration-300 ease-in-out z-10"
               >
                 {links}
               </ul>
             </div>
           </div>
           <div className="navbar-center hidden lg:flex">
-            <ul className="menu font-bold menu-horizontal px-1">{links}</ul>
+            <ul className="menu menu-horizontal space-x-6">{links}</ul>
           </div>
-          <div className="navbar-end">
+          <div className="navbar-end flex items-center space-x-4">
             {storedEmail ? (
-              <>
-                <span className="mr-4">Welcome, {storedEmail}</span>
-                <button
-                  onClick={logOut}
-                  className="bg-[#0F42AB] text-white btn transition-all hover:bg-[#0e4ed0]"
-                >
-                  Sign Out
-                </button>
-              </>
+              <button
+                onClick={logOut}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 ease-in-out"
+              >
+                Sign Out
+              </button>
             ) : (
               <>
                 <button
                   onClick={openModal2}
-                  className="bg-[#0F42AB] text-white btn transition-all hover:bg-[#0e4ed0]"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 ease-in-out"
                 >
                   Sign In
                 </button>
                 <button
                   onClick={openModal}
-                  className="bg-[#0F42AB] text-white btn transition-all hover:bg-[#0e4ed0]"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 ease-in-out"
                 >
                   Sign Up
                 </button>

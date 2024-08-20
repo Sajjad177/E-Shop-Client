@@ -13,6 +13,7 @@ const Products = () => {
   const limit = 6;
 
   const fetchProducts = async ({ queryKey }) => {
+    // eslint-disable-next-line no-unused-vars
     const [_key, { page, limit, search, sort, category, price }] = queryKey;
     const query = new URLSearchParams({
       page,
@@ -58,7 +59,7 @@ const Products = () => {
 
   const handleSearchClick = () => {
     setSearch(searchInput);
-    setPage(1); // Reset to the first page when performing a new search
+    setPage(1); 
   };
 
   const handleCategoryChange = (e) => setCategory(e.target.value);
@@ -68,10 +69,10 @@ const Products = () => {
   return (
     <div className="bg-base-200">
       <div className="container mx-auto pt-12 pb-24">
-        <h1 className="text-5xl text-center font-bold">Featured Products</h1>
+        <h1 className="lg:text-5xl text-3xl text-center font-bold">Featured Products</h1>
 
         {/* Search, Filter, and Sort Options */}
-        <div className="flex flex-col md:flex-row lg:flex-row justify-between items-center mt-8">
+        <div className="flex flex-col md:flex-row lg:flex-row justify-between items-center gap-4 mt-8">
           <div className="mb-4 flex flex-col sm:flex-row gap-2">
             <input
               type="text"
@@ -121,7 +122,7 @@ const Products = () => {
           </select>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6 mt-24">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6 lg:mt-24 mt-10">
           {products.map((product) => (
             <ProductsCard key={product._id} product={product} />
           ))}
