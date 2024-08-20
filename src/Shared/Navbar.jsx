@@ -2,12 +2,14 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../Provider/AuthProvider";
 import toast, { Toaster } from "react-hot-toast";
-import { FcGoogle } from "react-icons/fc";
+import SignUpModel from "./SignUpModel";
+import SignInModel from "./SignInModel";
 
 const Navbar = () => {
   const { user, createUser, createUserGoogle, userLogin, userSignOut } =
     useContext(AuthContext);
 
+  console.log(user);
   const openModal = () => {
     document.getElementById("sign_up_modal").showModal();
   };
@@ -21,7 +23,7 @@ const Navbar = () => {
   };
 
   const closeModal2 = () => {
-    document.getElementById("sign_in_modal").close(); 
+    document.getElementById("sign_in_modal").close();
   };
 
   const handlerCreateUser = (e) => {
@@ -71,8 +73,6 @@ const Navbar = () => {
         const user = result.user;
         console.log("Google Sign-In successful:", user);
         toast.success("Successfully Signed In with Google");
-        // closeModal2();
-        // closeModal();
       })
       .catch((err) => {
         console.error("Google Sign-In error:", err);
@@ -170,8 +170,10 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+
       {/* Sign Up Modal */}
-      <dialog id="sign_up_modal" className="modal">
+
+      {/* <dialog id="sign_up_modal" className="modal">
         <div className="modal-box">
           <button
             className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
@@ -239,9 +241,16 @@ const Navbar = () => {
             <p></p>
           </div>
         </div>
-      </dialog>
+      </dialog> */}
+      <SignUpModel
+        closeModal={closeModal}
+        handlerCreateUser={handlerCreateUser}
+        handleGoogleLogin={handleGoogleLogin}
+      />
+
       {/* Sign In Modal */}
-      <dialog id="sign_in_modal" className="modal">
+
+      {/* <dialog id="sign_in_modal" className="modal">
         <div className="modal-box">
           <button
             className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
@@ -296,7 +305,12 @@ const Navbar = () => {
             <p></p>
           </div>
         </div>
-      </dialog>
+      </dialog> */}
+      <SignInModel
+        closeModal2={closeModal2}
+        handleLogin={handleLogin}
+        handleGoogleLogin={handleGoogleLogin}
+      />
     </>
   );
 };

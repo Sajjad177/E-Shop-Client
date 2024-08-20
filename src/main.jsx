@@ -7,6 +7,7 @@ import AuthProvider from "./Provider/AuthProvider";
 import { Toaster } from "react-hot-toast";
 import router from "./Routers/router";
 
+// Create a QueryClient instance
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")).render(

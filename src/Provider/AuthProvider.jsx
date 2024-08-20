@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { createContext, useEffect, useState } from "react";
 import { auth } from "./../Firebase/Firebase.config";
 import {
@@ -13,6 +14,7 @@ export const AuthContext = createContext(null);
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  
   const googleProvider = new GoogleAuthProvider();
   const createUser = (email, password) => {
     setLoading(true);
@@ -50,6 +52,10 @@ const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
   );
+};
+AuthProvider.propTypes = {
+  // Array of children.
+  children: PropTypes.object,
 };
 
 export default AuthProvider;
