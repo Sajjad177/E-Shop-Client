@@ -17,11 +17,11 @@ const Navbar = () => {
   };
 
   const openModal2 = () => {
-    document.getElementById("sign_in_modal").showModal(); // Unique ID
+    document.getElementById("sign_in_modal").showModal();
   };
 
   const closeModal2 = () => {
-    document.getElementById("sign_in_modal").close(); // Unique ID
+    document.getElementById("sign_in_modal").close(); 
   };
 
   const handlerCreateUser = (e) => {

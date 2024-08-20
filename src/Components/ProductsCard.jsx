@@ -1,16 +1,9 @@
+import PropTypes from "prop-types";
 import ReactStars from "react-rating-stars-component";
 
 const ProductsCard = ({ product }) => {
-  const {
-    product_image,
-    product_name,
-    description,
-    price,
-    ratings,
-    category,
-    creation_date,
-  } = product;
-  console.log(product);
+  const { product_image, product_name, description, price, ratings } = product;
+
   return (
     <div>
       <div className="flex max-w-md overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800">
@@ -51,6 +44,16 @@ const ProductsCard = ({ product }) => {
       </div>
     </div>
   );
+};
+
+ProductsCard.propTypes = {
+  product: PropTypes.shape({
+    product_image: PropTypes.string.isRequired,
+    product_name: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    ratings: PropTypes.number,
+  }).isRequired,
 };
 
 export default ProductsCard;

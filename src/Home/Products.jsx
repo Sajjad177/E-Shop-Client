@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import ProductsCard from "../Components/ProductsCard";
-import  { useState } from "react";
+import { useState } from "react";
 import Loader from "../Components/Loader";
 
 const Products = () => {
   const [page, setPage] = useState(1);
+  const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("");
   const [category, setCategory] = useState("");
@@ -22,9 +23,8 @@ const Products = () => {
       price,
     }).toString();
     const response = await fetch(`http://localhost:3000/Products?${query}`);
-    console.log(response)
     if (!response.ok) {
-      throw new Error("Network response was not ok");
+      throw new Error("Network Problem please check again");
     }
     return response.json();
   };
@@ -54,7 +54,13 @@ const Products = () => {
     }
   };
 
-  const handleSearchChange = (e) => setSearch(e.target.value);
+  const handleSearchInputChange = (e) => setSearchInput(e.target.value);
+
+  const handleSearchClick = () => {
+    setSearch(searchInput);
+    setPage(1); // Reset to the first page when performing a new search
+  };
+
   const handleCategoryChange = (e) => setCategory(e.target.value);
   const handlePriceChange = (e) => setPrice(e.target.value);
   const handleSortChange = (e) => setSort(e.target.value);
@@ -66,13 +72,22 @@ const Products = () => {
 
         {/* Search, Filter, and Sort Options */}
         <div className="flex flex-col md:flex-row lg:flex-row justify-between items-center mt-8">
-          <input
-            type="text"
-            placeholder="Search products..."
-            value={search}
-            onChange={handleSearchChange}
-            className="input input-bordered w-full max-w-xs"
-          />
+          <div className="mb-4 flex flex-col sm:flex-row gap-2">
+            <input
+              type="text"
+              value={searchInput}
+              onChange={handleSearchInputChange}
+              placeholder="Search by Product Name"
+              className="p-3 border rounded w-full sm:w-2/3 md:w-3/4 lg:w-4/5"
+            />
+            <button
+              onClick={handleSearchClick}
+              className="p-4 bg-blue-500 text-white rounded w-full sm:w-1/3 md:w-1/4"
+            >
+              Search
+            </button>
+          </div>
+
           <select
             value={category}
             onChange={handleCategoryChange}
@@ -82,19 +97,6 @@ const Products = () => {
             <option value="Mobile">Mobile</option>
             <option value="Camera">Camera</option>
             <option value="Laptop">Laptop</option>
-            {/* <option value="Coats">Coats</option>
-            <option value="Pants">Pants</option>
-            <option value="Shorts">Shorts</option>
-            <option value="Jeans">Jeans</option>
-            <option value="Hoodies">Hoodies</option>
-            <option value="Jackets">Jackets</option>
-            <option value="Shirts">Shirts</option>
-            <option value="Blazers">Blazers</option>
-            <option value="Footwear">Footwear</option>
-            <option value="Dresses">Dresses</option>
-            <option value="Accessories">Accessories</option>
-            <option value="Swimwear">Swimwear</option>
-            <option value="Skirts">Skirts</option> */}
             {/* Add more categories as needed */}
           </select>
           <select
@@ -103,8 +105,8 @@ const Products = () => {
             className="select select-bordered"
           >
             <option value="">All Prices</option>
-            <option value="0-50">0 - 50</option>
-            <option value="50-100">50 - 100</option>
+            <option value="0-50">0-50</option>
+            <option value="50-100">50-100</option>
             {/* Add more price ranges as needed */}
           </select>
           <select
