@@ -3,7 +3,17 @@ import ReactStars from "react-rating-stars-component";
 import DetailsModal from "./DetailsModal";
 
 const ProductsCard = ({ product }) => {
-  const { product_image, product_name, description, price, ratings } = product;
+  const { product_image, product_name, description, price, ratings, _id } =
+    product;
+
+  const handleDetailsClick = () => {
+    const userEmail = localStorage.getItem("userEmail");
+    if (!userEmail) {
+      alert("Please sign in to view product details.");
+    } else {
+      document.getElementById(`details_modal_${_id}`);
+    }
+  };
 
   return (
     <div>
@@ -37,9 +47,13 @@ const ProductsCard = ({ product }) => {
             <h1 className="text-lg font-bold text-gray-700 dark:text-gray-200 md:text-xl">
               ${price}
             </h1>
-            {/* Details Modal added there */}
+            {/* Details Modal added here */}
             <div className="flex gap-4 justify-center">
-              <DetailsModal product={product} />
+              <DetailsModal
+                handleDetailsClick={handleDetailsClick}
+                modalId={`details_modal_${_id}`}
+                product={product}
+              />
             </div>
           </div>
         </div>
@@ -55,6 +69,7 @@ ProductsCard.propTypes = {
     description: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
     ratings: PropTypes.number,
+    _id: PropTypes.string.isRequired,
   }).isRequired,
 };
 

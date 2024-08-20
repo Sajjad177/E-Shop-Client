@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../Provider/AuthProvider";
 import toast, { Toaster } from "react-hot-toast";
@@ -8,8 +8,16 @@ import SignInModel from "./SignInModel";
 const Navbar = () => {
   const { user, createUser, createUserGoogle, userLogin, userSignOut } =
     useContext(AuthContext);
+  const [storedEmail, setStoredEmail] = useState(null);
 
-  console.log(user);
+  // Check localStorage for user email on component mount
+  useEffect(() => {
+    const email = localStorage.getItem("userEmail");
+    if (email) {
+      setStoredEmail(email);
+    }
+  }, []);
+
   const openModal = () => {
     document.getElementById("sign_up_modal").showModal();
   };
@@ -29,7 +37,6 @@ const Navbar = () => {
   const handlerCreateUser = (e) => {
     e.preventDefault();
     const form = e.target;
-    // const name = form.name.value;
     const email = form.email.value;
     const password = form.password.value;
     createUser(email, password)
@@ -37,6 +44,8 @@ const Navbar = () => {
         const user = result.user;
         if (user) {
           toast.success("Successfully Signed Up");
+          localStorage.setItem("userEmail", email); // Store email in localStorage
+          setStoredEmail(email);
         }
         form.reset();
         closeModal();
@@ -47,6 +56,7 @@ const Navbar = () => {
         }
       });
   };
+
   const handleLogin = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -57,6 +67,8 @@ const Navbar = () => {
         const user = result.user;
         if (user) {
           toast.success("Successfully Signed In");
+          localStorage.setItem("userEmail", email); // Store email in localStorage
+          setStoredEmail(email);
         }
         form.reset();
         closeModal2();
@@ -67,15 +79,19 @@ const Navbar = () => {
         }
       });
   };
+
   const handleGoogleLogin = () => {
     createUserGoogle()
       .then((result) => {
         const user = result.user;
-        console.log("Google Sign-In successful:", user);
-        toast.success("Successfully Signed In with Google");
+        if (user) {
+          const email = user.email;
+          toast.success("Successfully Signed In with Google");
+          localStorage.setItem("userEmail", email); // Store email in localStorage
+          setStoredEmail(email);
+        }
       })
       .catch((err) => {
-        console.error("Google Sign-In error:", err);
         toast.error(`Google Sign-In failed: ${err.message}`);
       });
   };
@@ -83,8 +99,11 @@ const Navbar = () => {
   const logOut = () => {
     userSignOut().then(() => {
       toast.success("Successfully Signed Out");
+      localStorage.removeItem("userEmail"); // Remove email from localStorage on sign out
+      setStoredEmail(null);
     });
   };
+
   const links = (
     <>
       <li>
@@ -105,7 +124,7 @@ const Navbar = () => {
   return (
     <>
       <Toaster position="top-right" reverseOrder={false} />
-      <div className="bg-base-200">
+      <div className="bg-base-200 border-2">
         <div className="navbar container mx-auto">
           <div className="navbar-start">
             <div className="dropdown">
@@ -136,21 +155,21 @@ const Navbar = () => {
                 {links}
               </ul>
             </div>
-            {/* <Link to="/">
-              <img className="w-24 h-24" src="./logo.png" alt="Logo" />
-            </Link> */}
           </div>
           <div className="navbar-center hidden lg:flex">
             <ul className="menu font-bold menu-horizontal px-1">{links}</ul>
           </div>
           <div className="navbar-end">
-            {user ? (
-              <button
-                onClick={logOut}
-                className="bg-[#0F42AB] text-white btn transition-all hover:bg-[#0e4ed0]"
-              >
-                Sign Out
-              </button>
+            {storedEmail ? (
+              <>
+                <span className="mr-4">Welcome, {storedEmail}</span>
+                <button
+                  onClick={logOut}
+                  className="bg-[#0F42AB] text-white btn transition-all hover:bg-[#0e4ed0]"
+                >
+                  Sign Out
+                </button>
+              </>
             ) : (
               <>
                 <button
@@ -171,21 +190,23 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Sign Up Modal */}
+      {!storedEmail && (
+        <>
+          {/* Sign Up Modal */}
+          <SignUpModel
+            closeModal={closeModal}
+            handlerCreateUser={handlerCreateUser}
+            handleGoogleLogin={handleGoogleLogin}
+          />
 
-      <SignUpModel
-        closeModal={closeModal}
-        handlerCreateUser={handlerCreateUser}
-        handleGoogleLogin={handleGoogleLogin}
-      />
-
-      {/* Sign In Modal */}
-
-      <SignInModel
-        closeModal2={closeModal2}
-        handleLogin={handleLogin}
-        handleGoogleLogin={handleGoogleLogin}
-      />
+          {/* Sign In Modal */}
+          <SignInModel
+            closeModal2={closeModal2}
+            handleLogin={handleLogin}
+            handleGoogleLogin={handleGoogleLogin}
+          />
+        </>
+      )}
     </>
   );
 };

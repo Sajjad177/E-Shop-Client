@@ -1,13 +1,21 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 
-const DetailsModal = ({ product }) => {
+const DetailsModal = ({ product, handleDetailsClick,}) => {
   const [openModal, setOpenModal] = useState(false);
 
+  // Handle button click to open the modal and check for user authentication
+  const openModalHandler = () => {
+    handleDetailsClick();
+    if (localStorage.getItem("userEmail")) {
+      setOpenModal(true);
+    }
+  };
+
   return (
-    <div className="mx-auto flex w-72 items-center justify-center">
+    <div>
       <button
-        onClick={() => setOpenModal(true)}
+        onClick={openModalHandler}
         className="rounded-md bg-blue-600 py-2 px-5 text-white hover:bg-blue-700"
       >
         Details
@@ -56,7 +64,15 @@ const DetailsModal = ({ product }) => {
 };
 
 DetailsModal.propTypes = {
-  item: PropTypes.object,
+  product: PropTypes.shape({
+    product_name: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    category: PropTypes.string,
+    product_image: PropTypes.string.isRequired,
+  }).isRequired,
+  handleDetailsClick: PropTypes.func.isRequired,
+  modalId: PropTypes.string.isRequired,
 };
 
 export default DetailsModal;
