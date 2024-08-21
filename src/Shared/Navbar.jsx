@@ -155,6 +155,13 @@ const Navbar = () => {
                 {links}
               </ul>
             </div>
+            <div>
+              <img
+                src="https://i.ibb.co/y4VtN9x/c6031e24c7f123cbfda1245a81eb75b2.png"
+                alt=""
+                className="h-14"
+              />
+            </div>
           </div>
           <div className="navbar-center hidden lg:flex">
             <ul className="menu menu-horizontal space-x-6">{links}</ul>
